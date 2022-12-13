@@ -21,7 +21,7 @@ create table `user`(
     `last_name` varchar(100),
     `username` varchar(100) unique,
     `password` varchar(100),
-    `email` varchar(100),
+    `email` varchar(320),
     `place_id` int,
     foreign key(`place_id`) references `place`(`id`)
 );
