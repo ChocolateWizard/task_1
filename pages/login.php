@@ -35,6 +35,8 @@
     <?php
     require_once(__DIR__ . "/../config.php");
     require(SITE_ROOT . "/database/repository/mysql/queries/UserQuery.php");
+    require(SITE_ROOT . "/logic/Controller.php");
+    $places = (new Controller())->getAllPlaces();
     ?>
     <div class="container mt-4">
         <div class="row">
@@ -92,13 +94,11 @@
                         <input type="password" name="password" class="form-control" placeholder="Password" <?php echo UserQuery::$constraints["password"]["required"] ?> minlength=<?php echo UserQuery::$constraints["password"]["minLength"] ?> maxlength=<?php echo UserQuery::$constraints["password"]["maxLength"] ?>>
                     </div>
                     <div class="form-group">
-                        <label for="place">Place</label>
-                        <select class="form-control" id="place">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                        <label for="placeId">Place</label>
+                        <select name="placeId" class="form-control" id="placeId">
+                            <?php foreach ($places as $place) { ?>
+                                <option value="<?php echo $place->get_id(); ?>"><?php echo $place->get_name(); ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -173,6 +173,54 @@
             $("#login-frm").validate();
             $("#register-frm").validate();
             $("#forgot-frm").validate();
+
+            $("#register").click(function(e) {
+                if (document.getElementById("register-frm").checkValidity()) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '../logic/handleClient.php',
+                        method: 'post',
+                        data: $("#register-frm").serialize() + '&action=register',
+                        success: function(response) {
+                            $("#alert").show();
+                            $("#result").html(response);
+                        }
+                    });
+                }
+                return true;
+            });
+
+            $("#login").click(function(e) {
+                if (document.getElementById("login-frm").checkValidity()) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '../logic/handleClient.php',
+                        method: 'post',
+                        data: $("#login-frm").serialize() + '&action=login',
+                        success: function(response) {
+                            $("#alert").show();
+                            $("#result").html(response);
+                        }
+                    });
+                }
+                return true;
+            });
+
+            $("#forgot").click(function(e) {
+                if (document.getElementById("forgot-frm").checkValidity()) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '../logic/handleClient.php',
+                        method: 'post',
+                        data: $("#forgot-frm").serialize() + '&action=forgot',
+                        success: function(response) {
+                            $("#alert").show();
+                            $("#result").html(response);
+                        }
+                    });
+                }
+                return true;
+            });
         });
     </script>
 </body>
