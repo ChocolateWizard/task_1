@@ -14,12 +14,19 @@
             display: none;
         }
 
+        .error {
+            border-color: #a94442;
+            border-width: 0.125em;
+        }
+
         label.error {
             color: #a94442;
             font-weight: 600;
-            /* background-color: #f2dede; */
-            /* border-color: #ebccd1;
-            padding: 1px 20px 1px 20px; */
+        }
+
+        .valid {
+            border-color: green;
+            border-width: 0.125em;
         }
     </style>
 </head>
