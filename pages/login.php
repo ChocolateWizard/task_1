@@ -34,15 +34,31 @@
 <body class="bg-dark">
     <?php
     require_once(__DIR__ . "/../config.php");
-    require(SITE_ROOT . "/database/repository/mysql/queries/UserQuery.php");
-    require(SITE_ROOT . "/logic/Controller.php");
+    require_once(SITE_ROOT . "/database/repository/mysql/queries/UserQuery.php");
+    require_once(SITE_ROOT . "/logic/Controller.php");
     $places = (new Controller())->getAllPlaces();
     ?>
     <div class="container mt-4">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-lg-4 offset-lg-4" id="alert">
                 <div class="alert alert-success">
                     <strong id="result">Hello world!</strong>
+                </div>
+            </div>
+        </div> -->
+        <!-- success message -->
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4" id="alert-success">
+                <div class="alert alert-success">
+                    <strong id="result-success">Success</strong>
+                </div>
+            </div>
+        </div>
+        <!-- error message -->
+        <div class="row">
+            <div class="col-lg-4 offset-lg-4" id="alert-error">
+                <div class="alert alert-danger">
+                    <strong id="result-error">Error</strong>
                 </div>
             </div>
         </div>
@@ -153,19 +169,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+            hidePopupMessages();
             $("#forgot-btn").click(function() {
+                hidePopupMessages();
                 $("#login-box").hide();
                 $("#forgot-box").show();
             });
             $("#register-btn").click(function() {
+                hidePopupMessages();
                 $("#login-box").hide();
                 $("#register-box").show();
             });
             $("#login-btn").click(function() {
+                hidePopupMessages();
                 $("#register-box").hide();
                 $("#login-box").show();
             });
             $("#back-btn").click(function() {
+                hidePopupMessages();
                 $("#forgot-box").hide();
                 $("#login-box").show();
             });
@@ -175,53 +196,90 @@
             $("#forgot-frm").validate();
 
             $("#register").click(function(e) {
+                hidePopupMessages();
                 if (document.getElementById("register-frm").checkValidity()) {
                     e.preventDefault();
                     $.ajax({
                         url: '../logic/handleClient.php',
                         method: 'post',
-                        data: $("#register-frm").serialize() + '&action=register',
+                        data: $("#register-frm").serialize() + '&request=register',
+                        dataType: "text",
                         success: function(response) {
-                            $("#alert").show();
-                            $("#result").html(response);
+                            if (!response.startsWith("Error")) {
+                                handleSuccess(response);
+                            } else {
+                                handleError(response);
+                            }
+                        },
+                        error: function(jqXHR, textStatusString, errorThrownString) {
+                            handleError(errorThrownString);
                         }
                     });
                 }
-                return true;
             });
 
             $("#login").click(function(e) {
+                hidePopupMessages();
                 if (document.getElementById("login-frm").checkValidity()) {
                     e.preventDefault();
                     $.ajax({
                         url: '../logic/handleClient.php',
                         method: 'post',
-                        data: $("#login-frm").serialize() + '&action=login',
+                        data: $("#login-frm").serialize() + '&request=login',
+                        dataType: "text",
                         success: function(response) {
-                            $("#alert").show();
-                            $("#result").html(response);
+                            if (!response.startsWith("Error")) {
+                                handleSuccess(response);
+                            } else {
+                                handleError(response);
+                            }
+                        },
+                        error: function(jqXHR, textStatusString, errorThrownString) {
+                            handleError(errorThrownString);
                         }
                     });
                 }
-                return true;
             });
 
             $("#forgot").click(function(e) {
+                hidePopupMessages();
                 if (document.getElementById("forgot-frm").checkValidity()) {
                     e.preventDefault();
                     $.ajax({
                         url: '../logic/handleClient.php',
                         method: 'post',
-                        data: $("#forgot-frm").serialize() + '&action=forgot',
+                        data: $("#forgot-frm").serialize() + '&request=forgot',
+                        dataType: "text",
                         success: function(response) {
-                            $("#alert").show();
-                            $("#result").html(response);
+                            if (!response.startsWith("Error")) {
+                                handleSuccess(response);
+                            } else {
+                                handleError(response);
+                            }
+                        },
+                        error: function(jqXHR, textStatusString, errorThrownString) {
+                            handleError(errorThrownString);
                         }
                     });
                 }
-                return true;
             });
         });
+        // CUSTOM FUNCTIONS
+
+        function hidePopupMessages() {
+            $("#alert-success").hide();
+            $("#alert-error").hide();
+        }
+
+        function handleError(error) {
+            $("#alert-error").show();
+            $("#result-error").html(error);
+        }
+
+        function handleSuccess(success) {
+            $("#alert-success").show();
+            $("#result-success").html(success);
+        }
     </script>
 </body>
 

@@ -1,7 +1,7 @@
 <?php
-require_once (__DIR__ . "/../../../config.php");
-require(SITE_ROOT . "/database/repository/mysql/MySQLRepository.php");
-require(SITE_ROOT . "/domain/Place.php");
+require_once(__DIR__ . "/../../../config.php");
+require_once(SITE_ROOT . "/database/repository/mysql/MySQLRepository.php");
+require_once(SITE_ROOT . "/domain/Place.php");
 class RepositoryPlace extends MySQLRepository
 {
 
@@ -21,5 +21,21 @@ class RepositoryPlace extends MySQLRepository
             }
             return $places;
         }
+    }
+    function find(int $id): null|Place
+    {
+        if ($this->connection == null) {
+            throw new ErrorException("Connection not established with database");
+        }
+        $sql = "select id,name from place where id=?";
+        $sql = $this->connection->prepare($sql);
+        $sql->bind_param("i", $id);
+        $sql->execute();
+        $result = $sql->get_result();
+        if ($result->num_rows == 0) {
+            return null;
+        }
+        $pom = $result->fetch_object();
+        return new Place($pom->id, $pom->name);
     }
 }

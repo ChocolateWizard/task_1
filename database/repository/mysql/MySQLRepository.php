@@ -1,7 +1,7 @@
 <?php
 
 require_once (__DIR__."/../../../config.php");
-require (SITE_ROOT."/database/repository/IRepository.php");
+require_once (SITE_ROOT."/database/repository/IRepository.php");
 abstract class MySQLRepository implements IRepository
 {
 

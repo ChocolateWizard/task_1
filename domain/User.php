@@ -2,23 +2,23 @@
 class User
 {
 
-    private int $id;
+    private int|null $id;
     private string $firstName;
     private string $lastName;
     private string $username;
     private string $password;
     private string $email;
-    private Place $place;
+    private Place|null $place;
 
-    public function __construct(int $id = null, string $firstName = "", string $lastName = "", string $username = "", string $password = "", string $email = "", Place $place = null)
-    {
-        $this->id = $id;
+    public function __construct(string $firstName = "", string $lastName = "", string $username = "", string $password = "", string $email = "", Place $place = null, int $id = null)
+    {    
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
         $this->place = $place;
+        $this->id = $id;
     }
 
 
