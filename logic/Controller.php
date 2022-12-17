@@ -1,42 +1,46 @@
 <?php
 require_once(__DIR__ . "/../config.php");
-require_once(SITE_ROOT . "/database/repository/mysql/RepositoryPlace.php");
+require_once(SITE_ROOT . "/database/repository/mysql/RepositoryCountry.php");
 require_once(SITE_ROOT . "/database/repository/mysql/RepositoryUser.php");
 require_once(SITE_ROOT . "/domain/User.php");
 class Controller
 {
 
-    private RepositoryPlace $repoPlace;
+    private RepositoryCountry $repoCountry;
     private RepositoryUser $repoUser;
 
     function __construct()
     {
-        $this->repoPlace = new RepositoryPlace();
+        $this->repoCountry = new RepositoryCountry();
         $this->repoUser = new RepositoryUser();
     }
 
-    function getAllPlaces()
+    function getAllCountries()
     {
         try {
-            $this->repoPlace->connect();
-            $places = $this->repoPlace->getAll();
-            $this->repoPlace->commit();
-            return $places;
+            $this->repoCountry->connect();
+            $countries = $this->repoCountry->getAll();
+            $this->repoCountry->commit();
+            return $countries;
         } catch (Exception $e) {
-            $this->repoPlace->rollback();
+            $this->repoCountry->rollback();
             throw $e;
         } finally {
-            $this->repoPlace->disconnect();
+            $this->repoCountry->disconnect();
         }
     }
-    function registerUser($firstName, $lastName, $email, $username, $password, $placeId)
+    function registerUser($firstName, $lastName, $email, $username, $password, $countryId)
     {
-        $user = $this->validateRegUserData($firstName, $lastName, $email, $username, $password, $placeId);
+        $user = $this->validateRegUserData($firstName, $lastName, $email, $username, $password, $countryId);
         try {
             $this->repoUser->connect();
             $dbUser = $this->repoUser->findByUsername($user);
             if ($dbUser != null) {
                 throw new Exception("Given username already exists!");
+            }
+            $dbUser = $this->repoUser->findByEmail($user);
+            if ($dbUser != null) {
+                throw new Exception("Given email already exists!");
             }
             $this->repoUser->insert($user);
             $this->repoUser->commit();
@@ -82,18 +86,48 @@ class Controller
             $this->repoUser->disconnect();
         }
     }
+    function doesUserEmailExist(string $email): bool
+    {
+        try {
+            $this->repoUser->connect();
+            $dbUser = $this->repoUser->findByEmail(new User("", "", "", "", $email));
+            $this->repoUser->commit();
+            if ($dbUser == null) {
+                return false;
+            }
+            return true;
+        } catch (Exception $e) {
+            $this->repoUser->rollback();
+            throw $e;
+        } finally {
+            $this->repoUser->disconnect();
+        }
+    }
+    function setToken(string $email, string $token)
+    {
+        try {
+            $this->repoUser->connect();
+            $this->repoUser->setToken(new User("", "", "", "", $email));
+            $this->repoUser->commit();
+        } catch (Exception $e) {
+            $this->repoUser->rollback();
+            throw $e;
+        } finally {
+            $this->repoUser->disconnect();
+        }
+    }
     //==================================================================================================================
-    private function validateRegUserData($firstName, $lastName, $email, $username, $password, $placeId): User
+    private function validateRegUserData($firstName, $lastName, $email, $username, $password, $countryId): User
     {
         $firstName = $this->trimInput($firstName);
         $lastName = $this->trimInput($lastName);
         $email = $this->trimInput($email);
         $username = $this->trimInput($username);
         $password = $this->trimInput($password);
-        $placeId = $this->trimInput($placeId);
-        $placeId = $this->parseInt($placeId);
-        $this->checkIfPlaceExists($placeId);
-        return new User($firstName, $lastName,  $username, $password, $email, new Place($placeId));
+        $countryId = $this->trimInput($countryId);
+        $countryId = $this->parseInt($countryId);
+        $this->checkIfCountryExists($countryId);
+        return new User($firstName, $lastName,  $username, $password, $email, new Country($countryId));
     }
     private function validateLogUserData($username, $password): User
     {
@@ -118,20 +152,20 @@ class Controller
         return (int)$placeId;
     }
     //if place exists does nothing, else throws exception
-    private function checkIfPlaceExists(int $placeId)
+    private function checkIfCountryExists(int $countryId)
     {
         try {
-            $this->repoPlace->connect();
-            $place = $this->repoPlace->find($placeId);
-            $this->repoPlace->commit();
-            if ($place == null) {
-                throw new Exception("Invalid place passed!");
+            $this->repoCountry->connect();
+            $country = $this->repoCountry->find($countryId);
+            $this->repoCountry->commit();
+            if ($country == null) {
+                throw new Exception("Invalid country passed!");
             }
         } catch (Exception $e) {
-            $this->repoPlace->rollback();
+            $this->repoCountry->rollback();
             throw $e;
         } finally {
-            $this->repoPlace->disconnect();
+            $this->repoCountry->disconnect();
         }
     }
 }

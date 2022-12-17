@@ -17,6 +17,7 @@ if (isset($_SESSION['username'])) {
     <style type="text/css">
         #alert-success,
         #alert-error,
+        #loader,
         #register-box,
         #forgot-box {
             display: none;
@@ -44,7 +45,7 @@ if (isset($_SESSION['username'])) {
     require_once(__DIR__ . "/../config.php");
     require_once(SITE_ROOT . "/database/repository/mysql/queries/UserQuery.php");
     require_once(SITE_ROOT . "/logic/Controller.php");
-    $places = (new Controller())->getAllPlaces();
+    $countries = (new Controller())->getAllCountries();
     ?>
     <div class="container mt-4">
         <!-- success message -->
@@ -62,6 +63,9 @@ if (isset($_SESSION['username'])) {
                     <strong id="result-error">Error</strong>
                 </div>
             </div>
+        </div>
+        <div class="text-center">
+            <img src="../database/resources/gifs/loading-transparent.gif" alt="loading..." width="40px" height="40px" class="m-2" id="loader">
         </div>
         <!-- LOGIN FORM -->
         <div class="row">
@@ -109,20 +113,17 @@ if (isset($_SESSION['username'])) {
                         <input type="password" name="password" class="form-control" placeholder="Password" <?php echo UserQuery::$constraints["password"]["required"] ?> minlength=<?php echo UserQuery::$constraints["password"]["minLength"] ?> maxlength=<?php echo UserQuery::$constraints["password"]["maxLength"] ?>>
                     </div>
                     <div class="form-group">
-                        <label for="placeId">Place</label>
-                        <select name="placeId" class="form-control" id="placeId">
-                            <?php foreach ($places as $place) { ?>
-                                <option value="<?php echo $place->get_id(); ?>"><?php echo $place->get_name(); ?></option>
+                        <label for="countryId">Country</label>
+                        <select name="countryId" class="form-control" id="countryId">
+                            <?php foreach ($countries as $country) { ?>
+                                <option value="<?php echo $country->get_id(); ?>"><?php echo $country->get_name(); ?></option>
                             <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" name="rem" class="custom-control-input" id="customCheck2">
-                            <label for="customCheck2" class="custom-control-label">
-                                I agree to the
-                                <a href="#">terms & conditions.</a>
-                            </label>
+                            <input type="checkbox" name="rem" class="custom-control-input" id="customCheck2" required>
+                            <label for="customCheck2" class="custom-control-label">I agree to the <a href="#">terms & conditions.</a></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -188,13 +189,24 @@ if (isset($_SESSION['username'])) {
             });
 
             $("#login-frm").validate();
-            $("#register-frm").validate();
+            $("#register-frm").validate({
+                errorPlacement: function(error, element) {
+                    // // Add the `invalid-feedback` class to the error element
+                    // error.addClass( "invalid-feedback" );
+                    if (element.prop("type") === "checkbox") {
+                        error.insertAfter(element.closest(".form-group"));
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
             $("#forgot-frm").validate();
 
             $("#register").click(function(e) {
                 hidePopupMessages();
                 if (document.getElementById("register-frm").checkValidity()) {
                     e.preventDefault();
+                    $('#loader').show();
                     $.ajax({
                         url: '../logic/handleClient.php',
                         method: 'post',
@@ -218,6 +230,7 @@ if (isset($_SESSION['username'])) {
                 hidePopupMessages();
                 if (document.getElementById("login-frm").checkValidity()) {
                     e.preventDefault();
+                    $('#loader').show();
                     $.ajax({
                         url: '../logic/handleClient.php',
                         method: 'post',
@@ -241,6 +254,7 @@ if (isset($_SESSION['username'])) {
                 hidePopupMessages();
                 if (document.getElementById("forgot-frm").checkValidity()) {
                     e.preventDefault();
+                    $('#loader').show();
                     $.ajax({
                         url: '../logic/handleClient.php',
                         method: 'post',
@@ -268,11 +282,13 @@ if (isset($_SESSION['username'])) {
         }
 
         function handleError(error) {
+            $('#loader').hide();
             $("#alert-error").show().delay(5000).fadeOut();
             $("#result-error").html(error);
         }
 
         function handleSuccess(success) {
+            $('#loader').hide();
             $("#alert-success").show().delay(5000).fadeOut();
             $("#result-success").html(success);
         }

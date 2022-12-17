@@ -14,7 +14,7 @@ if (isset($_POST['request'])) {
                 handleForgotPassword($_POST);
                 break;
             default:
-                print_r("Invalid action");
+                throw new Exception("Invalid action");
         }
     } catch (Exception $e) {
         die("Error: " . $e->getMessage());
@@ -28,22 +28,32 @@ function handleRegistration($data)
     $email = $data['email'];
     $username = $data['username'];
     $password = $data['password'];
-    $placeId = $data['placeId'];
+    $countryId = $data['countryId'];
 
     $controller = new Controller();
-    $controller->registerUser($firstName, $lastName, $email, $username, $password, $placeId);
+    $controller->registerUser($firstName, $lastName, $email, $username, $password, $countryId);
     echo "Accout successfully created";
 }
 function handleLogin($data)
 {
-    session_start();
     $username = $data['username'];
     $password = $data['password'];
     $controller = new Controller();
-    $user=$controller->loginUser($username, $password);
-    $_SESSION['username']=$user->get_username();
-    echo "Login successfull";   
+    $user = $controller->loginUser($username, $password);
+    session_start();
+    $_SESSION['username'] = $user->get_username();
+    echo "Login successfull";
 }
 function handleForgotPassword($data)
 {
+    $femail = $data['femail'];
+    $controller = new Controller();
+    if ($controller->doesUserEmailExist($femail)) {
+        $token = "aiogjrmqigrj5gt98q3jjrt8j3498tj5";
+        $token = str_shuffle($token);
+        $token = substr($token, 0, 10);
+        $controller->setToken($femail, $token);
+    } else {
+        throw new Exception("Invalid email. No user with given email!");
+    }
 }

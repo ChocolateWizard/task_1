@@ -1,8 +1,8 @@
 <?php
 require_once(__DIR__ . "/../../../config.php");
 require_once(SITE_ROOT . "/database/repository/mysql/MySQLRepository.php");
-require_once(SITE_ROOT . "/domain/Place.php");
-class RepositoryPlace extends MySQLRepository
+require_once(SITE_ROOT . "/domain/Country.php");
+class RepositoryCountry extends MySQLRepository
 {
 
     function getAll(): null|array
@@ -10,24 +10,24 @@ class RepositoryPlace extends MySQLRepository
         if ($this->connection == null) {
             throw new ErrorException("Connection not established with database");
         }
-        $sql = "select id,name from place";
+        $sql = "select id,name from country";
         $rs = $this->connection->query($sql);
         if ($rs->num_rows == 0) {
             return null;
         } else {
-            $places = [];
+            $countries = [];
             while ($row = $rs->fetch_object()) {
-                $places[] = new Place($row->id, $row->name);
+                $countries[] = new Country($row->id, $row->name);
             }
-            return $places;
+            return $countries;
         }
     }
-    function find(int $id): null|Place
+    function find(int $id): null|Country
     {
         if ($this->connection == null) {
             throw new ErrorException("Connection not established with database");
         }
-        $sql = "select id,name from place where id=?";
+        $sql = "select id,name from country where id=?";
         $sql = $this->connection->prepare($sql);
         $sql->bind_param("i", $id);
         $sql->execute();
@@ -36,6 +36,6 @@ class RepositoryPlace extends MySQLRepository
             return null;
         }
         $pom = $result->fetch_object();
-        return new Place($pom->id, $pom->name);
+        return new Country($pom->id, $pom->name);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-class Place
+class Country
 {
 
     private int $id;

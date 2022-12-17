@@ -8,16 +8,18 @@ class User
     private string $username;
     private string $password;
     private string $email;
-    private Place|null $place;
+    private Country|null $country;
+    private string $resetToken;
+    private $resetTokenExp;
 
-    public function __construct(string $firstName = "", string $lastName = "", string $username = "", string $password = "", string $email = "", Place | null $place = null, int | null $id = null)
-    {    
+    public function __construct(string $firstName = "", string $lastName = "", string $username = "", string $password = "", string $email = "", Country | null $country = null, int | null $id = null)
+    {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
-        $this->place = $place;
+        $this->country = $country;
         $this->id = $id;
     }
 
@@ -76,12 +78,29 @@ class User
         return $this->email;
     }
 
-    function set_place(Place $place)
+    function set_country(Country $country)
     {
-        $this->place = $place;
+        $this->country = $country;
     }
-    function get_place(): Place
+    function get_country(): Country
     {
-        return $this->place;
+        return $this->country;
+    }
+    function set_resetToken(string $resetToken)
+    {
+        $this->resetToken = $resetToken;
+    }
+    function get_resetToken(): string
+    {
+        return $this->resetToken;
+    }
+
+    function set_resetTokenExp($resetTokenExp)
+    {
+        $this->resetTokenExp = $resetTokenExp;
+    }
+    function get_resetTokenExp()
+    {
+        return $this->resetTokenExp;
     }
 }
