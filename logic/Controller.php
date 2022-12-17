@@ -31,7 +31,7 @@ class Controller
     }
     function registerUser($firstName, $lastName, $email, $username, $password, $placeId)
     {
-        $user = $this->validateUserData($firstName, $lastName, $email, $username, $password, $placeId);
+        $user = $this->validateRegUserData($firstName, $lastName, $email, $username, $password, $placeId);
         try {
             $this->repoUser->connect();
             $dbUser = $this->repoUser->findByUsername($user);
@@ -47,7 +47,43 @@ class Controller
             $this->repoUser->disconnect();
         }
     }
-    private function validateUserData($firstName, $lastName, $email, $username, $password, $placeId): User
+    function loginUser($username, $password): User
+    {
+        $user = $this->validateLogUserData($username, $password);
+        try {
+            $this->repoUser->connect();
+            $dbUser = $this->repoUser->findByUsername($user);
+            if ($dbUser == null) {
+                throw new Exception("Given user does not exist!");
+            }
+            if ($dbUser->get_password() !== $password) {
+                throw new Exception("Invalid user credentials!");
+            }
+            $this->repoUser->commit();
+            return $dbUser;
+        } catch (Exception $e) {
+            $this->repoUser->rollback();
+            throw $e;
+        } finally {
+            $this->repoUser->disconnect();
+        }
+    }
+    function getUser(string $username): User|null
+    {
+        try {
+            $this->repoUser->connect();
+            $dbUser = $this->repoUser->findByUsername(new User("", "", $username));
+            $this->repoUser->commit();
+            return $dbUser;
+        } catch (Exception $e) {
+            $this->repoUser->rollback();
+            throw $e;
+        } finally {
+            $this->repoUser->disconnect();
+        }
+    }
+    //==================================================================================================================
+    private function validateRegUserData($firstName, $lastName, $email, $username, $password, $placeId): User
     {
         $firstName = $this->trimInput($firstName);
         $lastName = $this->trimInput($lastName);
@@ -58,6 +94,12 @@ class Controller
         $placeId = $this->parseInt($placeId);
         $this->checkIfPlaceExists($placeId);
         return new User($firstName, $lastName,  $username, $password, $email, new Place($placeId));
+    }
+    private function validateLogUserData($username, $password): User
+    {
+        $username = $this->trimInput($username);
+        $password = $this->trimInput($password);
+        return new User("", "", $username, $password);
     }
     //trims string of trailing space lines and empty spaces as protection against SQL injection
     private function trimInput(string $data): string

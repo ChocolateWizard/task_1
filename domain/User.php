@@ -10,7 +10,7 @@ class User
     private string $email;
     private Place|null $place;
 
-    public function __construct(string $firstName = "", string $lastName = "", string $username = "", string $password = "", string $email = "", Place $place = null, int $id = null)
+    public function __construct(string $firstName = "", string $lastName = "", string $username = "", string $password = "", string $email = "", Place | null $place = null, int | null $id = null)
     {    
         $this->firstName = $firstName;
         $this->lastName = $lastName;

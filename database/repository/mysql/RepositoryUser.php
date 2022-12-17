@@ -50,8 +50,7 @@ class RepositoryUser extends MySQLRepository
                 $username = $row->username;
                 $password = $row->password;
                 $placeId = $row->place_id;
-                $placeName = $row->place_id;
-                $firstName = $row->name;
+                $placeName = $row->name;
                 return new User($firstName, $lastName, $username, $password, $email, new Place($placeId, $placeName), $id);
             }
         }
