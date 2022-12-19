@@ -1,5 +1,5 @@
 <?php
-require_once("session.php");
+require_once("functionality/php/session.php");
 ?>
 
 <!DOCTYPE html>
@@ -54,17 +54,17 @@ require_once("session.php");
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="logout.php" class="nav-link text-dark bg-light"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                <a href="functionality/php/logout.php" class="nav-link text-dark bg-light"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
                         <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
                     </svg>Logout</a>
             </li>
         </ul>
     </div>
-    
+
     <div class="page-content p-5" id="content">
-    <div id="helperDiv"></div>
-    <!-- This is where the content should reside -->
+        <div id="helperDiv"></div>
+        <!-- This is where the content should reside -->
         <?php for ($i = 0; $i < 100; $i++) { ?>
             aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             <p>aaaaaaaaaaaa</p>
@@ -76,13 +76,7 @@ require_once("session.php");
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script>
-        $(function() {
-            $('#profileLink').on('click', function() {
-                $('#sidebar, #content').toggleClass('active');
-            });
-        });
-    </script>
+    <script src="functionality/js/subMenu.js"></script>
 
 
 </body>
