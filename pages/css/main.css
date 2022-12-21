@@ -1,3 +1,19 @@
+#modalSuccess,
+#modalError {
+    background-color: #212529;
+}
+
+#modalSuccess-content {
+    color: green;
+    background-color: #d4edda;
+}
+
+#modalError-content {
+    color: #a94442;
+    background-color: #f8d7da;
+}
+
+/* ============================================================================================= */
 body {
     min-height: 100vh;
     overflow-x: hidden;

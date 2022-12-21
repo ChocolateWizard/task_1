@@ -116,6 +116,24 @@ class Controller
             $this->repoUser->disconnect();
         }
     }
+    function deleteUser($id)
+    {       
+        try {
+            $this->repoUser->connect();
+            $dbUser = $this->repoUser->findByID($id);
+            if ($dbUser == null) {
+                throw new Exception("Unable to delete. No such user in database!");
+            }
+            $this->repoUser->deleteByID($id);
+            $this->repoUser->commit();
+        } catch (Exception $e) {
+            $this->repoUser->rollback();
+            throw $e;
+        } finally {
+            $this->repoUser->disconnect();
+        }
+    }
+
     //==================================================================================================================
     private function validateRegUserData($firstName, $lastName, $email, $username, $password, $countryId): User
     {

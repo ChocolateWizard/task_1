@@ -82,6 +82,45 @@ class RepositoryUser extends MySQLRepository
             }
         }
     }
+    function findByID($id): User|null
+    {
+        if ($this->connection == null) {
+            throw new Exception("Connection not established with database");
+        }
+        $sql = "select u.id,u.first_name,u.last_name,u.username,u.password,u.email,u.country_id,c.name from user u inner join country c on(u.country_id=c.id) where u.id=?;";
+        $sql = $this->connection->prepare($sql);
+        $sql->bind_param("i", $id);
+        $sql->execute();
+        $sql = $sql->get_result();
+        if ($sql->num_rows == 0) {
+            return null;
+        } else {
+            while ($row = $sql->fetch_object()) {
+                $id = $row->id;
+                $firstName = $row->first_name;
+                $lastName = $row->last_name;
+                $email = $row->email;
+                $username = $row->username;
+                $password = $row->password;
+                $countryId = $row->country_id;
+                $countryName = $row->name;
+                return new User($firstName, $lastName, $username, $password, $email, new Country($countryId, $countryName), $id);
+            }
+        }
+    }
+    function deleteByID($id)
+    {
+        if ($this->connection == null) {
+            throw new Exception("Connection not established with database");
+        }
+        $sql = "delete from `user` where id=?;";
+        $sql = $this->connection->prepare($sql);
+        $sql->bind_param("i", $id);
+        $sql->execute();
+        if ($sql->affected_rows == 0) {
+            throw new Exception("Unable to delete user");
+        }
+    }
     function setToken(User $user): User|null
     {
         if ($this->connection == null) {

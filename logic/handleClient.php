@@ -13,6 +13,9 @@ if (isset($_POST['request'])) {
             case "forgot":
                 handleForgotPassword($_POST);
                 break;
+                case "deleteUser":
+                    handleDeleteUser($_POST);
+                    break;
             default:
                 throw new Exception("Invalid action");
         }
@@ -56,4 +59,11 @@ function handleForgotPassword($data)
     } else {
         throw new Exception("Invalid email. No user with given email!");
     }
+}
+function handleDeleteUser($data)
+{
+    $userID=$data['userID'];
+    $controller = new Controller();
+    $controller->deleteUser($userID);
+    echo "Profile successfully deleted";
 }
