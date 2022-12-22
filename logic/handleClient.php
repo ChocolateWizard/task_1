@@ -13,9 +13,12 @@ if (isset($_POST['request'])) {
             case "forgot":
                 handleForgotPassword($_POST);
                 break;
-                case "deleteUser":
-                    handleDeleteUser($_POST);
-                    break;
+            case "deleteUser":
+                handleDeleteUser($_POST);
+                break;
+            case "changeUserPassword":
+                handleChangeUserPassword($_POST);
+                break;
             default:
                 throw new Exception("Invalid action");
         }
@@ -62,8 +65,16 @@ function handleForgotPassword($data)
 }
 function handleDeleteUser($data)
 {
-    $userID=$data['userID'];
+    $userID = $data['userID'];
     $controller = new Controller();
     $controller->deleteUser($userID);
     echo "Profile successfully deleted";
+}
+
+function handleChangeUserPassword($data){
+    $userID = $data['userID'];
+    $newPassword=$data['password'];
+    $controller = new Controller();
+    $controller->changeUserPassword($userID,$newPassword);
+    echo "Password successfully changed";
 }

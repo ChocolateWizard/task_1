@@ -121,6 +121,19 @@ class RepositoryUser extends MySQLRepository
             throw new Exception("Unable to delete user");
         }
     }
+    function updateUserPasswordByID($id,$newPassword)
+    {
+        if ($this->connection == null) {
+            throw new Exception("Connection not established with database");
+        }
+        $sql = "update `user` set password=? where id=?;";
+        $sql = $this->connection->prepare($sql);
+        $sql->bind_param("si",$newPassword, $id);
+        $sql->execute();
+        if ($sql->affected_rows == 0) {
+            throw new Exception("Unable to update user password");
+        }
+    }
     function setToken(User $user): User|null
     {
         if ($this->connection == null) {

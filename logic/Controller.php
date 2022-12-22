@@ -117,7 +117,7 @@ class Controller
         }
     }
     function deleteUser($id)
-    {       
+    {
         try {
             $this->repoUser->connect();
             $dbUser = $this->repoUser->findByID($id);
@@ -133,7 +133,26 @@ class Controller
             $this->repoUser->disconnect();
         }
     }
-
+    function changeUserPassword($id, $newPassword)
+    {
+        $newPassword = $this->trimInput($newPassword);
+        try {
+            $this->repoUser->connect();
+            $dbUser = $this->repoUser->findByID($id);
+            if ($dbUser == null) {
+                throw new Exception("Unable to change password. No such user in database!");
+            }
+            $this->repoUser->updateUserPasswordByID($id, $newPassword);
+            $this->repoUser->commit();
+        } catch (Exception $e) {
+            $this->repoUser->rollback();
+            throw $e;
+        } finally {
+            $this->repoUser->disconnect();
+        }
+    }
+    //==================================================================================================================
+    //==================================================================================================================
     //==================================================================================================================
     private function validateRegUserData($firstName, $lastName, $email, $username, $password, $countryId): User
     {

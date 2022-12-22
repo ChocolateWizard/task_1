@@ -1,5 +1,6 @@
 <?php
 require_once("functionality/php/session.php");
+require_once("../database/repository/mysql/queries/UserQuery.php");
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +16,7 @@ require_once("functionality/php/session.php");
 </head>
 
 <body>
+    <!-- Success modal -->
     <div class="modal fade" id="modalSuccess" tabindex="-1" role="dialog" aria-labelledby="modalSuccess-label" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content" id="modalSuccess-content">
@@ -30,6 +32,7 @@ require_once("functionality/php/session.php");
             </div>
         </div>
     </div>
+    <!-- Error modal -->
     <div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="modalError-label" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content" id="modalError-content">
@@ -45,25 +48,32 @@ require_once("functionality/php/session.php");
             </div>
         </div>
     </div>
-    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Change password modal -->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModal-label" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="changePasswordModal-label">Insert new password</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <form action="" method="post" role="form" class="p-2" id="changePassword-frm">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="password" name="password" class="form-control" placeholder="New password" <?php echo UserQuery::$constraints["password"]["required"] ?> minlength=<?php echo UserQuery::$constraints["password"]["minLength"] ?> maxlength=<?php echo UserQuery::$constraints["password"]["maxLength"] ?>>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-group">
+                            <input type="submit" name="changePassword-btn" id="changePassword-btn" value="Save changes" class="btn btn-primary btn-block">
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </div> -->
+    </div>
+
     <!-- =========================================================================================== -->
     <nav class="navbar navbar-dark bg-dark justify-content-between" id="navHeader">
         <a class="navbar-brand" href="#" id="profileLink">Profile</a>
@@ -77,7 +87,7 @@ require_once("functionality/php/session.php");
         <div class="py-4 px-3 mb-4 bg-light">
             <div class="media d-flex align-items-center"><img src="../database/resources/images/wolf-icon.png" alt="Profile.jpg" width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm">
                 <div class="media-body">
-                    <h5 class="m-0"><?= $dbUser->get_firstName() . " " . $dbUser->get_lastName(); ?></h4>
+                    <h5 class="m-0"><?= $dbUser->get_firstName(); ?></h4>
                         <p class="font-weight-normal text-muted mb-0"><?= $dbUser->get_email(); ?></p>
                 </div>
             </div>
@@ -91,9 +101,9 @@ require_once("functionality/php/session.php");
                     </svg>Settings</a>
                 <ul class="collapse list-unstyled" id="homeSubmenu">
                     <li>
-                        <a href="#" class="nav-link text-dark bg-light"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-gear" viewBox="0 0 16 16">
+                        <a href="#" class="nav-link text-dark bg-light" id="changePasswordLink"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-gear" viewBox="0 0 16 16">
                                 <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382l.045-.148ZM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z" />
-                            </svg>Change passwor</a>
+                            </svg>Change password</a>
                     </li>
                     <li>
                         <a href="#" class="nav-link text-dark bg-light" id="deleteLink"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -113,13 +123,16 @@ require_once("functionality/php/session.php");
     </div>
 
     <div class="page-content p-5" id="content">
-        <div id="helperDiv"></div>
-        <!-- This is where the content should reside -->
-        <?php for ($i = 0; $i < 100; $i++) { ?>
-            aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-            <p>aaaaaaaaaaaa</p>
-            <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-        <?php } ?>
+        <div id="contentDiv">
+            <!-- This is where the content should reside -->
+            <?php for ($i = 0; $i < 100; $i++) { ?>
+                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                <p>aaaaaaaaaaaa</p>
+                <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+            <?php } ?>
+        </div>
+
+
     </div>
 
 
@@ -130,6 +143,36 @@ require_once("functionality/php/session.php");
     <script src="functionality/js/subMenu.js"></script>
     <script>
         $(document).ready(function() {
+
+            $("#changePassword-frm").validate();
+
+            $("#changePasswordLink").click(function(e) {
+                $("#changePasswordModal").modal('toggle');
+            });
+
+            $("#changePassword-btn").click(function(e) {
+                if (document.getElementById("changePassword-frm").checkValidity()) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: '../logic/handleClient.php',
+                        method: 'post',
+                        data: $("#changePassword-frm").serialize() + '&userID=<?php echo $dbUser->get_id(); ?>&request=changeUserPassword',
+                        dataType: "text",
+                        success: function(response) {
+                            if (!response.startsWith("Error")) {
+                                handleChangeUserPasswordSuccess(response);
+                            } else {
+                                handleChangeUserPasswordError(response);
+                            }
+                        },
+                        error: function(jqXHR, textStatusString, errorThrownString) {
+                            errorThrownString = "Error: ".errorThrownString;
+                            handleChangeUserPasswordError(errorThrownString);
+                        }
+                    });
+                }
+            });
+
             $("#deleteLink").click(function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -139,22 +182,35 @@ require_once("functionality/php/session.php");
                     dataType: "text",
                     success: function(response) {
                         if (!response.startsWith("Error")) {
-                            handleSuccess(response);
+                            handleDeleteUserSuccess(response);
                         } else {
-                            handleError(response);
+                            handleDeleteUserError(response);
                         }
                     },
                     error: function(jqXHR, textStatusString, errorThrownString) {
                         errorThrownString = "Error: ".errorThrownString;
-                        handleError(errorThrownString);
+                        handleDeleteUserError(errorThrownString);
                     }
                 });
             });
 
+
         });
         // CUSTOM FUNCTIONS
 
-        function handleSuccess(success) {
+        function handleChangeUserPasswordSuccess(success) {
+            $("#changePasswordModal").modal('hide');
+            $("#modalSuccess-body").html(success);
+            $("#modalSuccess").modal('toggle');
+        }
+
+        function handleChangeUserPasswordError(error) {
+            $("#changePasswordModal").modal('hide');
+            $("#modalError-body").html(error.substring(7));
+            $("#modalError").modal('toggle');
+        }
+
+        function handleDeleteUserSuccess(success) {
             $("#modalSuccess-body").html(success);
             $("#modalSuccess").modal('toggle');
             $('#modalSuccess').on('hidden.bs.modal', function(e) {
@@ -162,7 +218,7 @@ require_once("functionality/php/session.php");
             });
         }
 
-        function handleError(error) {
+        function handleDeleteUserError(error) {
             $("#modalError-body").html(error.substring(7));
             $("#modalError").modal('toggle');
         }

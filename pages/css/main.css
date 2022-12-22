@@ -1,5 +1,6 @@
 #modalSuccess,
-#modalError {
+#modalError,
+#changePasswordModal {
     background-color: #212529;
 }
 
@@ -38,7 +39,7 @@ body {
     position: fixed;
 }
 
-#helperDiv {
+#contentDiv {
     margin-top: 3.7rem;
 }
 
