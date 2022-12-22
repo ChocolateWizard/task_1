@@ -85,7 +85,7 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
     <!-- ================================================================================================================= -->
     <div class="vertical-nav bg-white" id="sidebar">
         <div class="py-4 px-3 mb-4 bg-light">
-            <div class="media d-flex align-items-center"><img src="../database/resources/images/wolf-icon.png" alt="Profile.jpg" width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm">
+            <div class="media d-flex align-items-center"><img src="../database/resources/images/icons/wolf-icon.png" alt="Profile.jpg" width="80" height="80" class="mr-3 rounded-circle img-thumbnail shadow-sm">
                 <div class="media-body">
                     <h5 class="m-0"><?= $dbUser->get_firstName(); ?></h4>
                         <p class="font-weight-normal text-muted mb-0"><?= $dbUser->get_email(); ?></p>

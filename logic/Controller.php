@@ -2,17 +2,19 @@
 require_once(__DIR__ . "/../config.php");
 require_once(SITE_ROOT . "/database/repository/mysql/RepositoryCountry.php");
 require_once(SITE_ROOT . "/database/repository/mysql/RepositoryUser.php");
+require_once(SITE_ROOT . "/database/repository/mysql/RepositoryMovie.php");
 require_once(SITE_ROOT . "/domain/User.php");
 class Controller
 {
-
     private RepositoryCountry $repoCountry;
     private RepositoryUser $repoUser;
+    private RepositoryMovie $repoMovie;
 
     function __construct()
     {
         $this->repoCountry = new RepositoryCountry();
         $this->repoUser = new RepositoryUser();
+        $this->repoMovie=new RepositoryMovie();
     }
 
     function getAllCountries()
