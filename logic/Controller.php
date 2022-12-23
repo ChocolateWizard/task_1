@@ -17,6 +17,21 @@ class Controller
         $this->repoMovie=new RepositoryMovie();
     }
 
+    function getMovieTitlesByTittleSuggestion($movieTittleSuggestion)
+    {
+        try {
+            $this->repoMovie->connect();
+            $titles = $this->repoMovie->getTitlesByTittleSuggestion($movieTittleSuggestion);
+            $this->repoMovie->commit();
+            return $titles;
+        } catch (Exception $e) {
+            $this->repoMovie->rollback();
+            throw $e;
+        } finally {
+            $this->repoMovie->disconnect();
+        }
+    }
+
     function getAllCountries()
     {
         try {

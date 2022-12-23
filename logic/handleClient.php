@@ -25,6 +25,19 @@ if (isset($_POST['request'])) {
     } catch (Exception $e) {
         die("Error: " . $e->getMessage());
     }
+} elseif (isset($_GET['request'])) {
+    $request = $_GET['request'];
+    try {
+        switch ($request) {
+            case "getMovieSuggestionsByTitle":
+                handleGetMovieSuggestionsByTitle($_GET);
+                break;
+            default:
+                throw new Exception("Invalid action");
+        }
+    } catch (Exception $e) {
+        die("Error: " . $e->getMessage());
+    }
 }
 
 function handleRegistration($data)
@@ -71,10 +84,26 @@ function handleDeleteUser($data)
     echo "Profile successfully deleted";
 }
 
-function handleChangeUserPassword($data){
+function handleChangeUserPassword($data)
+{
     $userID = $data['userID'];
-    $newPassword=$data['password'];
+    $newPassword = $data['password'];
     $controller = new Controller();
-    $controller->changeUserPassword($userID,$newPassword);
+    $controller->changeUserPassword($userID, $newPassword);
     echo "Password successfully changed";
+}
+
+function handleGetMovieSuggestionsByTitle($data)
+{
+    $partialMovieTitle = $data['movieTitle'];
+    try {
+        $controller = new Controller();
+        $titles = $controller->getMovieTitlesByTittleSuggestion($partialMovieTitle);
+        $n = array();
+        while ($data = $titles->fetch_assoc()) {
+            $n[] = $data;
+        }
+        echo json_encode($n);
+    } catch (Exception $e) {
+    }
 }

@@ -13,6 +13,7 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
     <title>Main page</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
 </head>
 
 <body>
@@ -78,7 +79,7 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
     <nav class="navbar navbar-dark bg-dark justify-content-between" id="navHeader">
         <a class="navbar-brand" href="#" id="profileLink">Profile</a>
         <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <input id="searchMovies-txt" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </nav>
@@ -125,11 +126,7 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
     <div class="page-content p-5" id="content">
         <div id="contentDiv">
             <!-- This is where the content should reside -->
-            <?php for ($i = 0; $i < 100; $i++) { ?>
-                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                <p>aaaaaaaaaaaa</p>
-                <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-            <?php } ?>
+
         </div>
 
 
@@ -141,8 +138,29 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="functionality/js/subMenu.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
+
+            $('#searchMovies-txt').autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: '../logic/handleClient.php',
+                        method: 'get',
+                        data: "movieTitle=" + $("#searchMovies-txt").val() + "&request=getMovieSuggestionsByTitle",
+                        dataType: "json",
+                        success: function(data) {
+                            var aData = $.map(data, function(value, key) {
+                                return {
+                                    label: value.title
+                                };
+                            });
+                            response(aData);
+                        }
+                    })
+                },
+                minLength: 1
+            });
 
             $("#changePassword-frm").validate();
 
@@ -197,6 +215,11 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
 
         });
         // CUSTOM FUNCTIONS
+
+        function place(ele) {
+            $("#searchMovies-txt").val(ele.innerHTML);
+            $("#livesearch").hide();
+        }
 
         function handleChangeUserPasswordSuccess(success) {
             $("#changePasswordModal").modal('hide');

@@ -9,4 +9,18 @@ class RepositoryMovie extends MySQLRepository
     {
         throw new Exception("Operation not supported");
     }
+
+    function getTitlesByTittleSuggestion($movieTittleSuggestion)
+    {
+        if ($this->connection == null) {
+            throw new Exception("Connection not established with database");
+        }
+        $sql = "select title from movie where title like '$movieTittleSuggestion%' ORDER BY title";
+        $titles = $this->connection->query($sql);
+        if ($titles->num_rows == 0) {
+            throw new Exception("No such movies in database");
+        } else {
+            return $titles;
+        }
+    }
 }
