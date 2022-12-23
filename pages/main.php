@@ -80,7 +80,7 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
         <a class="navbar-brand" href="#" id="profileLink">Profile</a>
         <form class="form-inline">
             <input id="searchMovies-txt" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            <button id="searchMovies-btn" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </nav>
     <!-- ================================================================================================================= -->
@@ -127,9 +127,10 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
         <div id="contentDiv">
             <!-- This is where the content should reside -->
 
+            
+
+
         </div>
-
-
     </div>
 
 
@@ -160,6 +161,23 @@ require_once("../database/repository/mysql/queries/UserQuery.php");
                     })
                 },
                 minLength: 1
+            });
+
+            $("#searchMovies-btn").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '../logic/handleClient.php',
+                    method: 'get',
+                    data: "movieTitle=" + $("#searchMovies-txt").val() + "&request=getMoviesByTitle",
+                    dataType: "text",
+                    success: function(response) {
+                        $("#contentDiv").html(response);
+                    },
+                    error: function(jqXHR, textStatusString, errorThrownString) {
+                        $("#contentDiv").html("Could not find any movies");
+                    }
+                });
+
             });
 
             $("#changePassword-frm").validate();
