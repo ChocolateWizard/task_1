@@ -78,11 +78,11 @@ if (isset($_SESSION['username'])) {
                     <div class="form-group">
                         <input autocomplete="new-password" type="password" name="password" class="form-control" placeholder="Password" <?php echo UserQuery::$constraints["password"]["required"] ?> minlength=<?php echo UserQuery::$constraints["password"]["minLength"] ?> maxlength=<?php echo UserQuery::$constraints["password"]["maxLength"] ?>>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <div class="custom-control">
                             <a href="#" id="forgot-btn" class="float-right">Forgot password?</a>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <input type="submit" name="login" id="login" value="Sign in" class="btn btn-primary btn-block">
                     </div>
@@ -137,7 +137,7 @@ if (isset($_SESSION['username'])) {
         </div>
 
         <!-- FORGOT PASSWORD -->
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-lg-4 offset-lg-4 bg-light rounded" id="forgot-box">
                 <h2 class="text-center mt-2">Reset password</h2>
                 <form action="" method="post" role="form" class="p-2" id="forgot-frm">
@@ -158,7 +158,7 @@ if (isset($_SESSION['username'])) {
                     </div>
                 </form>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -167,11 +167,11 @@ if (isset($_SESSION['username'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js" integrity="sha512-rstIgDs0xPgmG6RX1Aba4KV5cWJbAMcvRCVmglpam9SoHZiUCyQVDdH2LPlxoHtrv17XWblE/V/PP+Tr04hbtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#forgot-btn").click(function() {
-                hidePopupMessages();
-                $("#login-box").hide();
-                $("#forgot-box").show();
-            });
+            // $("#forgot-btn").click(function() {
+            //     hidePopupMessages();
+            //     $("#login-box").hide();
+            //     $("#forgot-box").show();
+            // });
             $("#register-btn").click(function() {
                 hidePopupMessages();
                 $("#login-box").hide();
@@ -182,11 +182,11 @@ if (isset($_SESSION['username'])) {
                 $("#register-box").hide();
                 $("#login-box").show();
             });
-            $("#back-btn").click(function() {
-                hidePopupMessages();
-                $("#forgot-box").hide();
-                $("#login-box").show();
-            });
+            // $("#back-btn").click(function() {
+            //     hidePopupMessages();
+            //     $("#forgot-box").hide();
+            //     $("#login-box").show();
+            // });
 
             $("#login-frm").validate();
             $("#register-frm").validate({
@@ -250,29 +250,29 @@ if (isset($_SESSION['username'])) {
                 }
             });
 
-            $("#forgot").click(function(e) {
-                hidePopupMessages();
-                if (document.getElementById("forgot-frm").checkValidity()) {
-                    e.preventDefault();
-                    $('#loader').show();
-                    $.ajax({
-                        url: '../logic/handleClient.php',
-                        method: 'post',
-                        data: $("#forgot-frm").serialize() + '&request=forgot',
-                        dataType: "text",
-                        success: function(response) {
-                            if (!response.startsWith("Error")) {
-                                handleSuccess(response);
-                            } else {
-                                handleError(response);
-                            }
-                        },
-                        error: function(jqXHR, textStatusString, errorThrownString) {
-                            handleError(errorThrownString);
-                        }
-                    });
-                }
-            });
+            // $("#forgot").click(function(e) {
+            //     hidePopupMessages();
+            //     if (document.getElementById("forgot-frm").checkValidity()) {
+            //         e.preventDefault();
+            //         $('#loader').show();
+            //         $.ajax({
+            //             url: '../logic/handleClient.php',
+            //             method: 'post',
+            //             data: $("#forgot-frm").serialize() + '&request=forgot',
+            //             dataType: "text",
+            //             success: function(response) {
+            //                 if (!response.startsWith("Error")) {
+            //                     handleSuccess(response);
+            //                 } else {
+            //                     handleError(response);
+            //                 }
+            //             },
+            //             error: function(jqXHR, textStatusString, errorThrownString) {
+            //                 handleError(errorThrownString);
+            //             }
+            //         });
+            //     }
+            // });
         });
         // CUSTOM FUNCTIONS
 

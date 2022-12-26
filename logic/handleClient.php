@@ -10,9 +10,9 @@ if (isset($_POST['request'])) {
             case "login":
                 handleLogin($_POST);
                 break;
-            case "forgot":
-                handleForgotPassword($_POST);
-                break;
+            // case "forgot":
+            //     handleForgotPassword($_POST);
+            //     break;
             case "deleteUser":
                 handleDeleteUser($_POST);
                 break;
@@ -66,19 +66,19 @@ function handleLogin($data)
     $_SESSION['username'] = $user->get_username();
     echo "Login successfull";
 }
-function handleForgotPassword($data)
-{
-    $femail = $data['femail'];
-    $controller = new Controller();
-    if ($controller->doesUserEmailExist($femail)) {
-        $token = "aiogjrmqigrj5gt98q3jjrt8j3498tj5";
-        $token = str_shuffle($token);
-        $token = substr($token, 0, 10);
-        $controller->setToken($femail, $token);
-    } else {
-        throw new Exception("Invalid email. No user with given email!");
-    }
-}
+// function handleForgotPassword($data)
+// {
+//     $femail = $data['femail'];
+//     $controller = new Controller();
+//     if ($controller->doesUserEmailExist($femail)) {
+//         $token = "aiogjrmqigrj5gt98q3jjrt8j3498tj5";
+//         $token = str_shuffle($token);
+//         $token = substr($token, 0, 10);
+//         $controller->setToken($femail, $token);
+//     } else {
+//         throw new Exception("Invalid email. No user with given email!");
+//     }
+// }
 function handleDeleteUser($data)
 {
     $userID = $data['userID'];
